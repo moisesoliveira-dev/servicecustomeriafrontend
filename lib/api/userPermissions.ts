@@ -55,7 +55,7 @@ export async function createUserPermission(permission: Omit<UserPermission, 'id'
 }
 
 export async function updateUserPermission(
-    id: string,
+    id: string | number,
     updates: Partial<UserPermission>
 ): Promise<UserPermission> {
     const dto: Record<string, unknown> = {};
@@ -74,7 +74,7 @@ export async function updateUserPermission(
     return fromDTO(data);
 }
 
-export async function deleteUserPermission(id: string): Promise<void> {
+export async function deleteUserPermission(id: string | number): Promise<void> {
     const { error } = await supabase
         .from('user_permissions')
         .delete()

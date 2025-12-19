@@ -2,9 +2,9 @@ import supabase from '@/lib/supabase';
 import { Credential, IntegrationStatus } from '@/types';
 
 interface CredentialDTO {
-    id: string;
-    company_id: string;
-    provider_id: string;
+    id: number;
+    company_id: number;
+    provider_id: number;
     alias: string;
     credential_id: string;
     status: string;
@@ -38,7 +38,7 @@ function fromDTO(dto: CredentialDTO): Credential {
     };
 }
 
-export async function getCredentialsByCompany(companyId: string): Promise<Credential[]> {
+export async function getCredentialsByCompany(companyId: string | number): Promise<Credential[]> {
     const { data, error } = await supabase
         .from('credentials')
         .select('*')
@@ -50,7 +50,7 @@ export async function getCredentialsByCompany(companyId: string): Promise<Creden
 }
 
 export async function createCredential(
-    companyId: string,
+    companyId: string | number,
     credential: Omit<Credential, 'id'>
 ): Promise<Credential> {
     const { data, error } = await supabase
@@ -70,7 +70,7 @@ export async function createCredential(
 }
 
 export async function updateCredential(
-    id: string,
+    id: string | number,
     updates: Partial<Credential>
 ): Promise<Credential> {
     const dto: Record<string, unknown> = {};
@@ -90,7 +90,7 @@ export async function updateCredential(
     return fromDTO(data);
 }
 
-export async function deleteCredential(id: string): Promise<void> {
+export async function deleteCredential(id: string | number): Promise<void> {
     const { error } = await supabase
         .from('credentials')
         .delete()

@@ -37,8 +37,8 @@ const SidebarItem: React.FC<{
     <button
       onClick={onClick}
       className={`w-full flex items-center space-x-3 px-4 py-2.5 rounded-xl transition-all duration-300 relative group overflow-hidden ${active
-          ? "bg-blue-600/10 text-blue-400 shadow-[inset_0_0_20px_rgba(59,130,246,0.05)] border border-blue-500/20"
-          : "text-slate-400 hover:bg-white/[0.03] hover:text-slate-200"
+        ? "bg-blue-600/10 text-blue-400 shadow-[inset_0_0_20px_rgba(59,130,246,0.05)] border border-blue-500/20"
+        : "text-slate-400 hover:bg-white/[0.03] hover:text-slate-200"
         }`}
     >
       {active && (
@@ -68,7 +68,7 @@ const CompanySwitcher: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const switcherRef = useRef<HTMLDivElement>(null);
 
-  const handleSelectCompany = (id: string) => {
+  const handleSelectCompany = (id: string | number) => {
     setActiveCompanyById(id);
     setIsOpen(false);
   };
@@ -111,7 +111,7 @@ const CompanySwitcher: React.FC = () => {
               {activeCompany.name}
             </p>
             <p className="text-[11px] text-slate-500 uppercase font-black truncate">
-              ID: {activeCompany.id.substring(0, 8)}
+              ID: {String(activeCompany.id).substring(0, 8)}
             </p>
           </div>
         </div>
@@ -136,8 +136,8 @@ const CompanySwitcher: React.FC = () => {
                 key={company.id}
                 onClick={() => handleSelectCompany(company.id)}
                 className={`w-full flex items-center space-x-3 p-3 rounded-lg text-left transition-colors ${activeCompany.id === company.id
-                    ? "bg-blue-600/10 text-blue-300"
-                    : "hover:bg-slate-800/50"
+                  ? "bg-blue-600/10 text-blue-300"
+                  : "hover:bg-slate-800/50"
                   }`}
               >
                 <div

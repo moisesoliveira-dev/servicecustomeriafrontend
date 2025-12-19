@@ -2,7 +2,7 @@ import supabase from '@/lib/supabase';
 import { EnvVar } from '@/types';
 
 interface EnvVarDTO {
-    id: string;
+    id: number;
     key: string;
     value: string;
     is_secret: boolean;
@@ -15,6 +15,7 @@ function fromDTO(dto: EnvVarDTO): EnvVar {
         id: dto.id,
         key: dto.key,
         value: dto.value,
+        isGlobal: true,
         isSecret: dto.is_secret,
     };
 }
@@ -44,7 +45,7 @@ export async function createEnvVar(envVar: Omit<EnvVar, 'id'>): Promise<EnvVar> 
     return fromDTO(data);
 }
 
-export async function updateEnvVar(id: string, updates: Partial<EnvVar>): Promise<EnvVar> {
+export async function updateEnvVar(id: string | number, updates: Partial<EnvVar>): Promise<EnvVar> {
     const dto: Record<string, unknown> = {};
     if (updates.key !== undefined) dto.key = updates.key;
     if (updates.value !== undefined) dto.value = updates.value;
@@ -61,7 +62,7 @@ export async function updateEnvVar(id: string, updates: Partial<EnvVar>): Promis
     return fromDTO(data);
 }
 
-export async function deleteEnvVar(id: string): Promise<void> {
+export async function deleteEnvVar(id: string | number): Promise<void> {
     const { error } = await supabase
         .from('env_vars')
         .delete()

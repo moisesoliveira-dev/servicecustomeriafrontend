@@ -35,8 +35,8 @@ const IntegrationHub: React.FC = () => {
         }
     }, [activeCompany]);
 
-    const handleTestConnection = (id: string) => {
-        setIsTesting(id);
+    const handleTestConnection = (id: string | number) => {
+        setIsTesting(String(id));
         // Simulação de handshake com backend
         setTimeout(() => {
             setCredentials(prev => prev.map(c =>
@@ -197,7 +197,7 @@ const IntegrationHub: React.FC = () => {
                                                     <div>
                                                         <div className="flex items-center space-x-3">
                                                             <h4 className="text-sm font-bold text-white">{cred.alias}</h4>
-                                                            <StatusIndicator status={cred.status} />
+                                                            <StatusIndicator status={cred.status || IntegrationStatus.DISCONNECTED} />
                                                         </div>
                                                         <div className="flex items-center mt-1 space-x-4 text-[11px] font-black text-slate-600 uppercase tracking-widest">
                                                             <span>ID: {cred.credentialId}</span>

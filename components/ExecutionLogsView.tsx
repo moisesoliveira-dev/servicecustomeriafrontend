@@ -91,7 +91,7 @@ const LogDetailView: React.FC<{ log: ExecutionLog | null }> = ({ log }) => (
 
 const LogsSidebar: React.FC<{
   logs: ExecutionLog[];
-  selectedLogId: string | null;
+  selectedLogId: string | number | null;
   onSelectLog: (log: ExecutionLog) => void;
   searchTerm: string;
   onSearchChange: (term: string) => void;
@@ -124,7 +124,7 @@ const LogsSidebar: React.FC<{
             <p className="text-[12px] font-black text-slate-300 uppercase tracking-widest truncate">{log.sessionId}</p>
             <div className="flex justify-between items-center mt-3">
               <span className="text-[12px] text-slate-600 font-bold italic">{log.duration}</span>
-              <span className="text-[11px] text-slate-700 font-mono">{log.timestamp.split(' ')[1]}</span>
+              <span className="text-[11px] text-slate-700 font-mono">{log.timestamp?.split(' ')[1] || ''}</span>
             </div>
           </motion.button>
         ))}
@@ -144,7 +144,7 @@ const ExecutionLogsView: React.FC = () => {
     return MOCK_EXECUTIONS.filter(log => {
       const matchesStatus = statusFilter === 'ALL' || log.status === statusFilter;
       const lowerSearch = searchTerm.toLowerCase();
-      const matchesSearch = searchTerm === '' || log.id.toLowerCase().includes(lowerSearch) || log.sessionId.toLowerCase().includes(lowerSearch);
+      const matchesSearch = searchTerm === '' || String(log.id).toLowerCase().includes(lowerSearch) || log.sessionId.toLowerCase().includes(lowerSearch);
       return matchesStatus && matchesSearch;
     });
   }, [searchTerm, statusFilter]);

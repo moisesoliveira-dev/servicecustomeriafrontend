@@ -18,7 +18,7 @@ export interface Database {
         Tables: {
             companies: {
                 Row: {
-                    id: string
+                    id: number
                     name: string
                     color: string
                     crm_type: CrmType
@@ -28,29 +28,24 @@ export interface Database {
                     updated_at: string
                 }
                 Insert: {
-                    id?: string
                     name: string
                     color?: string
                     crm_type?: CrmType
                     internal_schema?: Json | null
                     output_template?: Json | null
-                    created_at?: string
-                    updated_at?: string
                 }
                 Update: {
-                    id?: string
                     name?: string
                     color?: string
                     crm_type?: CrmType
                     internal_schema?: Json | null
                     output_template?: Json | null
-                    updated_at?: string
                 }
             }
             crm_configs: {
                 Row: {
                     id: number
-                    company_id: string
+                    company_id: number
                     webhook_url: string | null
                     ai_instructions: string | null
                     source_json: string | null
@@ -58,8 +53,7 @@ export interface Database {
                     updated_at: string
                 }
                 Insert: {
-                    id?: number
-                    company_id: string
+                    company_id: number
                     webhook_url?: string | null
                     ai_instructions?: string | null
                     source_json?: string | null
@@ -72,7 +66,7 @@ export interface Database {
             }
             integrations: {
                 Row: {
-                    id: string
+                    id: number
                     name: string
                     type: string
                     icon: string | null
@@ -80,7 +74,6 @@ export interface Database {
                     created_at: string
                 }
                 Insert: {
-                    id: string
                     name: string
                     type: string
                     icon?: string | null
@@ -95,9 +88,9 @@ export interface Database {
             }
             credentials: {
                 Row: {
-                    id: string
-                    company_id: string
-                    provider_id: string
+                    id: number
+                    company_id: number
+                    provider_id: number
                     alias: string
                     credential_id: string
                     status: IntegrationStatus
@@ -108,9 +101,8 @@ export interface Database {
                     updated_at: string
                 }
                 Insert: {
-                    id?: string
-                    company_id: string
-                    provider_id: string
+                    company_id: number
+                    provider_id: number
                     alias: string
                     credential_id: string
                     status?: IntegrationStatus
@@ -126,8 +118,8 @@ export interface Database {
             }
             output_routes: {
                 Row: {
-                    id: string
-                    company_id: string
+                    id: number
+                    company_id: number
                     name: string
                     url: string
                     method: HttpMethod
@@ -138,8 +130,7 @@ export interface Database {
                     updated_at: string
                 }
                 Insert: {
-                    id?: string
-                    company_id: string
+                    company_id: number
                     name: string
                     url: string
                     method?: HttpMethod
@@ -158,14 +149,13 @@ export interface Database {
             }
             output_route_headers: {
                 Row: {
-                    id: string
-                    route_id: string
+                    id: number
+                    route_id: number
                     key: string
                     value: string
                 }
                 Insert: {
-                    id?: string
-                    route_id: string
+                    route_id: number
                     key: string
                     value: string
                 }
@@ -176,8 +166,8 @@ export interface Database {
             }
             output_executions: {
                 Row: {
-                    id: string
-                    route_id: string
+                    id: number
+                    route_id: number
                     timestamp: string
                     status: number
                     payload: Json | null
@@ -185,8 +175,7 @@ export interface Database {
                     duration: string | null
                 }
                 Insert: {
-                    id?: string
-                    route_id: string
+                    route_id: number
                     status: number
                     payload?: Json | null
                     response?: Json | null
@@ -201,7 +190,7 @@ export interface Database {
             }
             env_vars: {
                 Row: {
-                    id: string
+                    id: number
                     key: string
                     value: string
                     is_secret: boolean
@@ -209,7 +198,6 @@ export interface Database {
                     updated_at: string
                 }
                 Insert: {
-                    id?: string
                     key: string
                     value: string
                     is_secret?: boolean
@@ -222,8 +210,8 @@ export interface Database {
             }
             execution_logs: {
                 Row: {
-                    id: string
-                    company_id: string | null
+                    id: number
+                    company_id: number | null
                     session_id: string
                     timestamp: string
                     duration: string | null
@@ -231,8 +219,7 @@ export interface Database {
                     created_at: string
                 }
                 Insert: {
-                    id?: string
-                    company_id?: string | null
+                    company_id?: number | null
                     session_id: string
                     status: ExecutionStatus
                     duration?: string | null
@@ -245,7 +232,7 @@ export interface Database {
             execution_steps: {
                 Row: {
                     id: number
-                    execution_log_id: string
+                    execution_log_id: number
                     step_order: number
                     name: string
                     status: StepStatus
@@ -254,7 +241,7 @@ export interface Database {
                     payload_out: Json | null
                 }
                 Insert: {
-                    execution_log_id: string
+                    execution_log_id: number
                     step_order: number
                     name: string
                     status: StepStatus
@@ -271,7 +258,7 @@ export interface Database {
             }
             user_permissions: {
                 Row: {
-                    id: string
+                    id: number
                     user_email: string
                     role: string
                     scope: string
@@ -279,7 +266,6 @@ export interface Database {
                     updated_at: string
                 }
                 Insert: {
-                    id?: string
                     user_email: string
                     role: string
                     scope: string
@@ -292,27 +278,26 @@ export interface Database {
             }
             flow_nodes: {
                 Row: {
-                    id: string
-                    company_id: string
+                    id: number
+                    company_id: number
                     node_type: NodeType
                     label: string
                     position_x: number
                     position_y: number
                     config: Json | null
-                    provider_id: string | null
+                    provider_id: number | null
                     is_deletable: boolean
                     created_at: string
                     updated_at: string
                 }
                 Insert: {
-                    id?: string
-                    company_id: string
+                    company_id: number
                     node_type: NodeType
                     label: string
                     position_x?: number
                     position_y?: number
                     config?: Json | null
-                    provider_id?: string | null
+                    provider_id?: number | null
                     is_deletable?: boolean
                 }
                 Update: {
@@ -326,19 +311,18 @@ export interface Database {
             }
             flow_edges: {
                 Row: {
-                    id: string
-                    company_id: string
-                    source_node_id: string
-                    target_node_id: string
+                    id: number
+                    company_id: number
+                    source_node_id: number
+                    target_node_id: number
                     edge_type: string | null
                     animated: boolean
                     created_at: string
                 }
                 Insert: {
-                    id?: string
-                    company_id: string
-                    source_node_id: string
-                    target_node_id: string
+                    company_id: number
+                    source_node_id: number
+                    target_node_id: number
                     edge_type?: string | null
                     animated?: boolean
                 }

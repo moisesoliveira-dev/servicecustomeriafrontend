@@ -115,7 +115,7 @@ const CompanyListItem: React.FC<{ company: Company; isActive: boolean; onEdit: (
                 <div>
                     <h3 className="text-lg font-bold text-white group-hover:text-blue-400 transition-colors">{company.name}</h3>
                     <div className="flex items-center mt-1 space-x-3">
-                        <span className="text-[12px] text-slate-600 font-black uppercase tracking-widest">TENANT-ID: {company.id.substring(0, 8)}</span>
+                        <span className="text-[12px] text-slate-600 font-black uppercase tracking-widest">TENANT-ID: {String(company.id).substring(0, 8)}</span>
                         <span className="w-1 h-1 rounded-full bg-slate-800"></span>
                         <div className="flex items-center space-x-1">
                             <span className="text-[12px] text-blue-500/80 font-black uppercase tracking-widest">CORE:</span>

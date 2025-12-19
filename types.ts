@@ -18,14 +18,14 @@ export enum IntegrationStatus {
 }
 
 export interface Header {
-    id: string;
-    key: string;
+    id: string | number;
+    key?: string;
     value: string;
 }
 
 export interface OutputExecution {
-    id: string;
-    timestamp: string;
+    id: string | number;
+    timestamp?: string;
     status: number;
     payload: any;
     response: any;
@@ -33,28 +33,31 @@ export interface OutputExecution {
 }
 
 export interface OutputRoute {
-    id: string;
-    name: string;
-    url: string;
+    id: string | number;
+    name?: string;
+    url?: string;
     method: 'POST' | 'PUT' | 'GET';
     headers: Header[];
     bodyTemplate: string;
     history?: OutputExecution[];
     group?: string;
+    companyId?: string | number;
+    isActive?: boolean;
 }
 
 export interface Credential {
-    id: string;
+    id: string | number;
     alias: string;
-    providerId: string;
-    status: IntegrationStatus;
-    lastTested: string;
+    providerId: string | number;
     expiresAt?: string;
     credentialId: string;
+    status?: IntegrationStatus;
+    lastTested?: string;
+    companyId?: string | number;
 }
 
 export interface Company {
-    id: string;
+    id: string | number;
     name: string;
     color: string;
     crmType: CRMType;
@@ -70,17 +73,17 @@ export interface Company {
 }
 
 export interface EnvVar {
-    id: string;
+    id: string | number;
     key: string;
     value: string;
-    isSecret: boolean;
+    isGlobal: boolean;
+    isSecret?: boolean;
 }
 
 export interface Integration {
-    id: string;
+    id: string | number;
     name: string;
-    type: string;
-    icon: string;
+    icon?: string;
     configFields: {
         label: string;
         key: string;
@@ -98,16 +101,17 @@ export interface ExecutionStep {
 }
 
 export interface ExecutionLog {
-    id: string;
+    id: string | number;
     sessionId: string;
-    timestamp: string;
-    duration: string;
+    companyId?: string | number;
+    timestamp?: string;
+    duration?: string;
     status: 'SUCCESS' | 'FAILURE' | 'RUNNING';
     steps: ExecutionStep[];
 }
 
 export interface UserPermission {
-    id: string;
+    id: string | number;
     user?: string; // deprecated, use userEmail
     userEmail: string;
     role: string;

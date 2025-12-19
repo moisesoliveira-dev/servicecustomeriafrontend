@@ -63,7 +63,7 @@ function fromExecutionDTO(dto: ExecutionDTO): OutputExecution {
     };
 }
 
-export async function getOutputRoutesByCompany(companyId: string): Promise<OutputRoute[]> {
+export async function getOutputRoutesByCompany(companyId: string | number): Promise<OutputRoute[]> {
     // Get routes
     const { data: routesData, error: routesError } = await supabase
         .from('output_routes')
@@ -114,7 +114,7 @@ export async function getOutputRoutesByCompany(companyId: string): Promise<Outpu
 }
 
 export async function createOutputRoute(
-    companyId: string,
+    companyId: string | number,
     route: Omit<OutputRoute, 'id' | 'history'>
 ): Promise<OutputRoute> {
     const { data, error } = await supabase
@@ -186,7 +186,7 @@ export async function updateOutputRoute(
     return fromRouteDTO(data, updates.headers || [], []);
 }
 
-export async function deleteOutputRoute(id: string): Promise<void> {
+export async function deleteOutputRoute(id: string | number): Promise<void> {
     // Headers and executions are deleted by CASCADE
     const { error } = await supabase
         .from('output_routes')

@@ -32,8 +32,8 @@ const OutputGeneratorView: React.FC = () => {
         if (!searchTerm) return routes;
         const lowercasedFilter = searchTerm.toLowerCase();
         return routes.filter(route =>
-            route.name.toLowerCase().includes(lowercasedFilter) ||
-            route.url.toLowerCase().includes(lowercasedFilter)
+            (route.name?.toLowerCase().includes(lowercasedFilter) || false) ||
+            (route.url?.toLowerCase().includes(lowercasedFilter) || false)
         );
     }, [routes, searchTerm]);
 

@@ -2,7 +2,7 @@ import supabase from '@/lib/supabase';
 import { Company, CRMType } from '@/types';
 
 export interface CompanyDTO {
-    id: string;
+    id: number;
     name: string;
     color: string;
     crm_type: string;
@@ -55,7 +55,7 @@ export async function getCompanies(): Promise<Company[]> {
     return (data || []).map(fromDTO);
 }
 
-export async function getCompanyById(id: string): Promise<Company | null> {
+export async function getCompanyById(id: string | number): Promise<Company | null> {
     const { data, error } = await supabase
         .from('companies')
         .select('*')
@@ -89,7 +89,7 @@ export async function createCompany(company: Omit<Company, 'id' | 'credentials' 
     return fromDTO(data);
 }
 
-export async function updateCompany(id: string, updates: Partial<Company>): Promise<Company> {
+export async function updateCompany(id: string | number, updates: Partial<Company>): Promise<Company> {
     const dto = toDTO(updates);
 
     const { data, error } = await supabase
@@ -103,7 +103,7 @@ export async function updateCompany(id: string, updates: Partial<Company>): Prom
     return fromDTO(data);
 }
 
-export async function deleteCompany(id: string): Promise<void> {
+export async function deleteCompany(id: string | number): Promise<void> {
     const { error } = await supabase
         .from('companies')
         .delete()

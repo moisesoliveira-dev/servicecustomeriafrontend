@@ -2,7 +2,7 @@ import supabase from '@/lib/supabase';
 import { Integration } from '@/types';
 
 interface IntegrationDTO {
-    id: string;
+    id: number;
     name: string;
     type: string;
     icon: string | null;
@@ -15,7 +15,6 @@ function fromDTO(dto: IntegrationDTO): Integration {
     return {
         id: dto.id,
         name: dto.name,
-        type: dto.type,
         icon: dto.icon || '',
         configFields: configFields.map((f: Record<string, unknown>) => ({
             label: String(f.label || ''),
@@ -36,7 +35,7 @@ export async function getIntegrations(): Promise<Integration[]> {
     return (data || []).map(fromDTO);
 }
 
-export async function getIntegrationById(id: string): Promise<Integration | null> {
+export async function getIntegrationById(id: string | number): Promise<Integration | null> {
     const { data, error } = await supabase
         .from('integrations')
         .select('*')
@@ -54,9 +53,8 @@ export async function createIntegration(integration: Integration): Promise<Integ
     const { data, error } = await supabase
         .from('integrations')
         .insert({
-            id: integration.id,
             name: integration.name,
-            type: integration.type,
+            type: 'custom',
             icon: integration.icon || null,
             config_fields: integration.configFields || [],
         })
@@ -71,7 +69,7 @@ export async function seedIntegrations(integrations: Integration[]): Promise<voi
     const dtos = integrations.map((i) => ({
         id: i.id,
         name: i.name,
-        type: i.type,
+        type: 'custom',
         icon: i.icon || null,
         config_fields: i.configFields || [],
     }));

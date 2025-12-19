@@ -18,11 +18,11 @@ const EnvVarModal: React.FC<{ mode: 'new' | 'edit', initialData?: EnvVar, onSave
         if (mode === 'edit' && initialData) {
             setKey(initialData.key);
             setValue(initialData.value);
-            setIsSecret(initialData.isSecret);
+            setIsSecret(initialData.isSecret || false);
         }
     }, [mode, initialData]);
 
-    const handleSave = () => onSave({ key, value, isSecret });
+    const handleSave = () => onSave({ key, value, isSecret, isGlobal: true });
 
     return (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">

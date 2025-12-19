@@ -2,8 +2,8 @@ import supabase from '@/lib/supabase';
 import { ExecutionLog, ExecutionStep } from '@/types';
 
 interface ExecutionLogDTO {
-    id: string;
-    company_id: string | null;
+    id: number;
+    company_id: number | null;
     session_id: string;
     timestamp: string;
     duration: string | null;
@@ -43,7 +43,7 @@ function fromDTO(dto: ExecutionLogDTO, steps: ExecutionStep[] = []): ExecutionLo
     };
 }
 
-export async function getExecutionLogs(companyId?: string, limit = 50): Promise<ExecutionLog[]> {
+export async function getExecutionLogs(companyId?: string | number, limit = 50): Promise<ExecutionLog[]> {
     let query = supabase
         .from('execution_logs')
         .select('*')
@@ -80,7 +80,7 @@ export async function getExecutionLogs(companyId?: string, limit = 50): Promise<
     return logsData.map((l) => fromDTO(l, stepsByLog[l.id] || []));
 }
 
-export async function getExecutionLogById(id: string): Promise<ExecutionLog | null> {
+export async function getExecutionLogById(id: string | number): Promise<ExecutionLog | null> {
     const { data: logData, error: logError } = await supabase
         .from('execution_logs')
         .select('*')
@@ -106,7 +106,7 @@ export async function getExecutionLogById(id: string): Promise<ExecutionLog | nu
 
 export async function createExecutionLog(
     log: Omit<ExecutionLog, 'id'>,
-    companyId?: string
+    companyId?: string | number
 ): Promise<ExecutionLog> {
     const { data: logData, error: logError } = await supabase
         .from('execution_logs')

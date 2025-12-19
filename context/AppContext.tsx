@@ -37,20 +37,20 @@ interface AppContextType {
     logout: () => void;
 
     // Company operations
-    setActiveCompanyById: (id: string | null) => void;
-    updateCompany: (id: string, updates: Partial<Company>) => Promise<void>;
+    setActiveCompanyById: (id: string | number | null) => void;
+    updateCompany: (id: string | number, updates: Partial<Company>) => Promise<void>;
     addCompany: (company: Omit<Company, 'id' | 'credentials' | 'outputRoutes'>) => Promise<void>;
-    deleteCompany: (id: string) => Promise<void>;
+    deleteCompany: (id: string | number) => Promise<void>;
 
     // Global vars operations
     addGlobalVar: (variable: Omit<EnvVar, "id">) => Promise<void>;
-    updateGlobalVar: (id: string, updates: Partial<EnvVar>) => Promise<void>;
-    deleteGlobalVar: (id: string) => Promise<void>;
+    updateGlobalVar: (id: string | number, updates: Partial<EnvVar>) => Promise<void>;
+    deleteGlobalVar: (id: string | number) => Promise<void>;
 
     // Permission operations
     addPermission: (permission: Omit<UserPermission, "id">) => Promise<void>;
-    updatePermission: (id: string, updates: Partial<UserPermission>) => Promise<void>;
-    deletePermission: (id: string) => Promise<void>;
+    updatePermission: (id: string | number, updates: Partial<UserPermission>) => Promise<void>;
+    deletePermission: (id: string | number) => Promise<void>;
 
     // Reload
     reloadCompanies: () => Promise<void>;
@@ -71,7 +71,7 @@ export const useApp = () => {
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
     const [companies, setCompanies] = useState<Company[]>([]);
-    const [activeCompanyId, setActiveCompanyId] = useState<string | null>(null);
+    const [activeCompanyId, setActiveCompanyId] = useState<string | number | null>(null);
     const [globalVars, setGlobalVars] = useState<EnvVar[]>([]);
     const [permissions, setPermissions] = useState<UserPermission[]>([]);
     const [integrations, setIntegrations] = useState<Integration[]>([]);
@@ -94,7 +94,9 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
         try {
             // Load companies with their credentials and output routes
+            console.log('📦 Loading companies...');
             const companiesData = await api.getCompanies();
+            console.log(`✅ Loaded ${companiesData.length} companies`);
 
             // Load credentials and output routes for each company
             const companiesWithRelations = await Promise.all(
@@ -117,6 +119,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
             }
 
             // Load other data in parallel
+            console.log('📦 Loading global data...');
             const [varsData, permissionsData, integrationsData, logsData] = await Promise.all([
                 api.getEnvVars(),
                 api.getUserPermissions(),
@@ -130,14 +133,21 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
             // If no integrations exist in the database, seed them
             if (integrationsData.length === 0) {
+                console.log('🌱 Seeding integrations...');
                 await api.seedIntegrations(INTEGRATIONS_LIST);
                 setIntegrations(INTEGRATIONS_LIST);
             } else {
                 setIntegrations(integrationsData);
             }
+
+            console.log('✅ Initial data loaded successfully');
         } catch (err) {
-            console.error('Failed to load initial data:', err);
-            setError(err instanceof Error ? err.message : 'Failed to load data');
+            const errorMessage = err instanceof Error ? err.message : String(err);
+            const errorDetails = err instanceof Error ? err.stack : JSON.stringify(err);
+            console.error('❌ Failed to load initial data:', errorMessage);
+            console.error('Error details:', errorDetails);
+            console.error('Full error object:', err);
+            setError(errorMessage || 'Failed to load data');
         } finally {
             setIsLoading(false);
         }
@@ -172,7 +182,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     };
 
     // Company operations
-    const updateCompany = async (id: string, updates: Partial<Company>) => {
+    const updateCompany = async (id: string | number, updates: Partial<Company>) => {
         try {
             const updated = await api.updateCompany(id, updates);
             setCompanies((prev) =>
@@ -203,7 +213,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         }
     };
 
-    const deleteCompanyAction = async (id: string) => {
+    const deleteCompanyAction = async (id: string | number) => {
         try {
             await api.deleteCompany(id);
             setCompanies((prev) => {
@@ -232,7 +242,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         }
     };
 
-    const updateGlobalVar = async (id: string, updates: Partial<EnvVar>) => {
+    const updateGlobalVar = async (id: string | number, updates: Partial<EnvVar>) => {
         try {
             const updated = await api.updateEnvVar(id, updates);
             setGlobalVars((prev) =>
@@ -244,7 +254,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         }
     };
 
-    const deleteGlobalVar = async (id: string) => {
+    const deleteGlobalVar = async (id: string | number) => {
         try {
             await api.deleteEnvVar(id);
             setGlobalVars((prev) => prev.filter((v) => v.id !== id));
@@ -265,7 +275,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         }
     };
 
-    const updatePermission = async (id: string, updates: Partial<UserPermission>) => {
+    const updatePermission = async (id: string | number, updates: Partial<UserPermission>) => {
         try {
             const updated = await api.updateUserPermission(id, updates);
             setPermissions((prev) =>
@@ -277,7 +287,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         }
     };
 
-    const deletePermission = async (id: string) => {
+    const deletePermission = async (id: string | number) => {
         try {
             await api.deleteUserPermission(id);
             setPermissions((prev) => prev.filter((p) => p.id !== id));
