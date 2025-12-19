@@ -52,19 +52,19 @@ const EnvVarModal: React.FC<{ mode: 'new' | 'edit', initialData?: EnvVar, onSave
 };
 
 const PermissionModal: React.FC<{ mode: 'new' | 'edit', initialData?: UserPermission, onSave: (data: Omit<UserPermission, 'id'>) => void, onClose: () => void }> = ({ mode, initialData, onSave, onClose }) => {
-    const [user, setUser] = useState('');
+    const [userEmail, setUserEmail] = useState('');
     const [role, setRole] = useState('AUDITOR');
     const [scope, setScope] = useState('GLOBAL_LOGS');
 
     useEffect(() => {
         if (mode === 'edit' && initialData) {
-            setUser(initialData.user);
+            setUserEmail(initialData.userEmail || initialData.user || '');
             setRole(initialData.role);
             setScope(initialData.scope);
         }
     }, [mode, initialData]);
 
-    const handleSave = () => onSave({ user, role, scope });
+    const handleSave = () => onSave({ userEmail, role, scope });
 
     const ROLES = ['MASTER_ADMIN', 'FLOW_DESIGNER', 'OPERATOR', 'AUDITOR'];
     const SCOPES = ['GLOBAL', 'GLOBAL_LOGS', 'TENANT_A', 'TENANT_B'];
@@ -76,7 +76,7 @@ const PermissionModal: React.FC<{ mode: 'new' | 'edit', initialData?: UserPermis
                 <div className="space-y-6">
                     <div>
                         <label className="text-[12px] font-black text-slate-600 uppercase tracking-widest block mb-2">User Email</label>
-                        <input type="email" value={user} onChange={e => setUser(e.target.value)} placeholder="user@company.com" className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-slate-300 outline-none focus:ring-2 focus:ring-blue-500/30" />
+                        <input type="email" value={userEmail} onChange={e => setUserEmail(e.target.value)} placeholder="user@company.com" className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-slate-300 outline-none focus:ring-2 focus:ring-blue-500/30" />
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                         <div>
